@@ -27,7 +27,7 @@ except logs.exceptions.ResourceAlreadyExistsException:
 try:
     os.environ['seqtoken']
 except:
-    os.environ['seqtoken'] = 5
+    os.environ['seqtoken'] = str(5)
 try:
     logs.create_log_stream(logGroupName=logname,logStreamName=streamname)
 except logs.exceptions.ResourceAlreadyExistsException:
