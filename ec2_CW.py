@@ -25,10 +25,6 @@ try:
 except logs.exceptions.ResourceAlreadyExistsException:
     print('LogGroup Already Present')
 try:
-    os.environ['seqtoken']
-except:
-    os.environ['seqtoken'] = str(5)
-try:
     logs.create_log_stream(logGroupName=logname,logStreamName=streamname)
 except logs.exceptions.ResourceAlreadyExistsException:
     print('Stream is already present')
@@ -38,9 +34,7 @@ resp = logs.put_log_events(logGroupName='CloudWatch-Logs',
         {
             'timestamp': int(round(time.time() * 1000)),
             'message': 'Written from EC2_User_data'
-        }],
-        sequenceToken = os.environ['seqtoken']
-    )
+        }])
 try:
     os.environ['seqtoken'] = resp['nextSequenceToken']
     print('Log Event successfully written.')
