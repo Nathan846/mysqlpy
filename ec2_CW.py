@@ -17,7 +17,7 @@ import os
 region = 'ap-south-1'
 buckname = 'buckvaidhyanathan'
 logname = 'CloudWatch-Logs'
-streamname = 'Stream'
+streamname = 'Boto3stream'
 logs = boto3.client('logs',region_name=region)
 try:
     response = logs.create_log_group(
@@ -28,16 +28,19 @@ try:
     logs.create_log_stream(logGroupName=logname,logStreamName=streamname)
 except logs.exceptions.ResourceAlreadyExistsException:
     print('Stream is already present')
+t = logs.describe_log_streams(logGroupName=logname,logStreamNamePrefix=streamname)
+token = t['logStreams'][0]['uploadSequenceToken']
 resp = logs.put_log_events(logGroupName='CloudWatch-Logs',
     logStreamName='Boto3stream',
     logEvents=[
         {
             'timestamp': int(round(time.time() * 1000)),
             'message': 'Written from EC2_User_data'
-        }])
+        }],
+        sequenceToken = token
+    )
 try:
-    os.environ['seqtoken'] = resp['nextSequenceToken']
+    token = resp['nextSequenceToken']
     print('Log Event successfully written.')
-    print('Sequence token saved as an environment variable for the next put event.')
 except KeyError:
     print('Unable to process the request')
