@@ -17,7 +17,7 @@ import os
 region = 'ap-south-1'
 buckname = 'buckvaidhyanathan'
 logname = 'CloudWatch-Logs'
-streamname = 'Boto3stream'
+streamname = 'Stream'
 logs = boto3.client('logs',region_name=region)
 try:
     response = logs.create_log_group(
